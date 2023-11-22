@@ -21,19 +21,20 @@ def compute_Q_scores(embeddings, current_z_scores):
             cosine_similarities_i = []
             z_scores_i = []
             # compute the cosine distance between embedding i and all others
-            for j in range(embeddings.shape[0]):
+            for j in range(0,embeddings.shape[0]):
                 if j == i or np.isnan(current_z_scores[j]):
                     continue
                 d_i_j = cosine_distance(embeddings[i], embeddings[j])
                 z_scores_i.append(current_z_scores[j]) 
-                cosine_similarities_i.append(d_i_j)
-            
+                cosine_similarities_i.append(1/d_i_j)
+
             cosine_similarities_i = np.array(cosine_similarities_i)
             z_scores_i = np.array(z_scores_i)
 
             # standardise the similarities
             # normalised_cosine_similarities_i = (cosine_similarities_i - np.mean(cosine_similarities_i)) / np.std(cosine_similarities_i)
             normalised_cosine_similarities_i = cosine_similarities_i
+
             # compute the q score
             Q_i = np.sum(normalised_cosine_similarities_i * z_scores_i)
             Q_scores.append(Q_i)
@@ -50,7 +51,7 @@ def main():
         print('Running the demo')
         # generate a random embeddings matrix and z score matrix
         embeddings = np.random.randn(100, 400)
-        current_z_scores = np.random.randn(100, 1)
+        current_z_scores = np.random.randn(100)
         no_unasked_qs = 40
         indices = np.random.choice(range(100), no_unasked_qs, replace=False)
 

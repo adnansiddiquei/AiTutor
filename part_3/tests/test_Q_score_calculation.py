@@ -6,7 +6,7 @@ def test_Q_score_calculation():
     """
     
     embeddings = np.array([[1, 2], [4, 5], [7, 8]])
-    z_scores = np.array([[1], [0.5], [np.nan]])
+    z_scores = np.array([1, 0.5, np.nan])
     Q_scores = compute_Q_scores(embeddings, z_scores)
-    assert Q_scores[0] - 60.49  < 0.01, 'Q score method is incorrect'
-    
+    answers = np.asarray([22.524971938103768, 45.049943876207536, 545.4083162176418])
+    assert np.amax(np.abs(Q_scores - answers)) < 1e-3, 'test'
