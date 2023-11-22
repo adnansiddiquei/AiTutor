@@ -50,6 +50,7 @@ def main():
     parser = argparse.ArgumentParser(description='Process a CSV file.')
     parser.add_argument('--csv_file', type=str, help='Path to the CSV file')
     parser.add_argument('--demo', action='store_true', help='Run the demo')
+    parser.add_argument('--out_csv_file', type=str, help='Path to the output CSV file')
 
     args = parser.parse_args()
     if args.demo:
@@ -64,18 +65,30 @@ def main():
         current_z_scores[indices] = np.nan
 
         Q_scores = compute_Q_scores(embeddings, current_z_scores)
-        
-        plt.hist(Q_scores)
-        plt.show()
 
     else:
         # Read the CSV file
         df = pd.read_csv(args.csv_file)
 
         # Read the embeddings matrix
-
+        embeddings = df['embeddings']
+    
         # Read the z score matrix
+        z_score = df['z_scores'][:,-1]
 
+        # Read Q score matrix
+
+        Q_score_matrix = df['Q_scores']
+
+        Q_scores = compute_Q_scores(embeddings, current_z_scores)
+
+        # Appened Q scores to Q score matrix column
+        Q_score_matrix = np.append(Q_score_matrix, Q_scores, axis=1)
+
+        df['Q_scores'] = Q_score_matrix
+
+        # save df as pickle
+        df.to_pickle(args.out_csv_file)
 
 if __name__ == '__main__':
     main()
