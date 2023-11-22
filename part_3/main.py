@@ -14,6 +14,31 @@ def cosine_distance(a, b):
     cosine_similarity = np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
     return 1 - cosine_similarity
 
+def compute_Q_scores(embeddings, current_z_scores):
+    # compute Q score for each question
+        Q_scores = []
+        for i in range(embeddings.shape[0]):
+            cosine_similarities_i = []
+            z_scores_i = []
+            # compute the cosine distance between embedding i and all others
+            for j in range(embeddings.shape[0]):
+                if j == i or np.isnan(current_z_scores[j]):
+                    continue
+                d_i_j = cosine_distance(embeddings[i], embeddings[j])
+                z_scores_i.append(current_z_scores[j]) 
+                cosine_similarities_i.append(d_i_j)
+            
+            cosine_similarities_i = np.array(cosine_similarities_i)
+            z_scores_i = np.array(z_scores_i)
+
+            # standardise the similarities
+            # normalised_cosine_similarities_i = (cosine_similarities_i - np.mean(cosine_similarities_i)) / np.std(cosine_similarities_i)
+            normalised_cosine_similarities_i = cosine_similarities_i
+            # compute the q score
+            Q_i = np.sum(normalised_cosine_similarities_i * z_scores_i)
+            Q_scores.append(Q_i)
+        
+        return Q_scores
 
 def main():
     parser = argparse.ArgumentParser(description='Process a CSV file.')
@@ -32,28 +57,8 @@ def main():
         # assign a random subset of current z scores to np.nan
         current_z_scores[indices] = np.nan
 
-        # compute Q score for each question
-        Q_scores = []
-        for i in range(100):
-            cosine_similarities_i = []
-            z_scores_i = []
-            # compute the cosine distance between embedding i and all others
-            for j in range(100):
-                if j == i or np.isnan(current_z_scores[j]):
-                    continue
-                d_i_j = cosine_distance(embeddings[i], embeddings[j])
-                z_scores_i.append(current_z_scores[j]) 
-                cosine_similarities_i.append(d_i_j)
-            
-            cosine_similarities_i = np.array(cosine_similarities_i)
-            z_scores_i = np.array(z_scores_i)
-
-            # standardise the similarities
-            normalised_cosine_similarities_i = (cosine_similarities_i - np.mean(cosine_similarities_i)) / np.std(cosine_similarities_i)
-
-            # compute the q score
-            Q_i = np.sum(normalised_cosine_similarities_i/np.sum(normalised_cosine_similarities_i) * z_scores_i)
-            Q_scores.append(Q_i)
+        Q_scores = compute_Q_scores(embeddings, current_z_scores)
+        
         plt.hist(Q_scores)
         plt.show()
 
