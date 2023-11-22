@@ -17,28 +17,33 @@ def cosine_distance(a, b):
 def compute_Q_scores(embeddings, current_z_scores):
     # compute Q score for each question
         Q_scores = []
+        # compute the cosine distance between embedding i and all others
+        inv_cosine_similarities = np.zeros((embeddings.shape[0],embeddings.shape[0]))
         for i in range(embeddings.shape[0]):
-            cosine_similarities_i = []
-            z_scores_i = []
-            # compute the cosine distance between embedding i and all others
+            # TODO: Make this loop more efficient
             for j in range(0,embeddings.shape[0]):
                 if j == i or np.isnan(current_z_scores[j]):
-                    continue
-                d_i_j = cosine_distance(embeddings[i], embeddings[j])
-                z_scores_i.append(current_z_scores[j]) 
-                cosine_similarities_i.append(1/d_i_j)
+                    inv_cosine_similarities[i,j] = np.nan
+                else:
+                    d_i_j = cosine_distance(embeddings[i], embeddings[j])
+                    inv_cosine_similarities[i,j] = 1/d_i_j
+                    inv_cosine_similarities[j,i] = 1/d_i_j
 
-            cosine_similarities_i = np.array(cosine_similarities_i)
-            z_scores_i = np.array(z_scores_i)
+        # normalise inv_cosine_similarities
+        max_val = np.nanmax(inv_cosine_similarities)
+        min_val = np.nanmin(inv_cosine_similarities)
 
-            # standardise the similarities
-            # normalised_cosine_similarities_i = (cosine_similarities_i - np.mean(cosine_similarities_i)) / np.std(cosine_similarities_i)
-            normalised_cosine_similarities_i = cosine_similarities_i
+        normalised_inv_cosine_similarities = (inv_cosine_similarities - min_val)/(max_val - min_val)
+        print(normalised_inv_cosine_similarities)
+        total_normalised_inv_cosine_similarities = np.nansum(normalised_inv_cosine_similarities)/2
+        for i in range(embeddings.shape[0]):
+            # compute Q score for question i
+            Q_score_i = 0
+            for j in range(embeddings.shape[0]):
+                if j != i and not np.isnan(current_z_scores[j]):
+                    Q_score_i += normalised_inv_cosine_similarities[i,j]/(total_normalised_inv_cosine_similarities) * current_z_scores[j]
+            Q_scores.append(Q_score_i)
 
-            # compute the q score
-            Q_i = np.sum(normalised_cosine_similarities_i * z_scores_i)
-            Q_scores.append(Q_i)
-        
         return Q_scores
 
 def main():

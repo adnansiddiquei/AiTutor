@@ -8,5 +8,6 @@ def test_Q_score_calculation():
     embeddings = np.array([[1, 2], [4, 5], [7, 8]])
     z_scores = np.array([1, 0.5, np.nan])
     Q_scores = compute_Q_scores(embeddings, z_scores)
-    answers = np.asarray([22.524971938103768, 45.049943876207536, 545.4083162176418])
+    answers = np.asarray([0.006998255927016391, 0.013996511854032782, 0.4930017440729836])
+    
     assert np.amax(np.abs(Q_scores - answers)) < 1e-3, 'test'
