@@ -12,23 +12,25 @@ function App() {
   // ];
   
   const [data, setData] = useState(null)
-  
+
   const fetchData = async () => {
     try {
-      const response = await fetch('https://localhost:8080/visualise');
+      const response = await fetch('http://127.0.0.1:8080/visualise');
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
       const result = await response.json();
-      setData(result);
+      setData(result)
     } catch (error) {
       console.error('Failed to fetch data:', error);
     }
   };
   
+  fetchData().then(res => console.log(res))
+  
   return (
     <div className="App">
-      <ScatterPlot data={data} />
+      {data && <ScatterPlot data={data} />}
     </div>
   );
 }
