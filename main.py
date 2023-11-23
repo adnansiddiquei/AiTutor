@@ -40,66 +40,27 @@ def post_question():
     question_id = data.get('id')
     answer = data.get('answer')
     time_taken = data.get('timeTaken')
-    response_time = data.get('responseTime')
-
+    response_times = data.get('responseTime')
+    lesson_id = data.get('lessonId')
+    
     # Compute z scores
+    current_z_scores = []
     for idx,id_ in enumerate(question_id):
         question_row = df.loc[id_]
         question = question_row['question']
         response = answer[idx]
-        response_time = time_taken[idx]
-
-        calc_z_score(question, answer, response, response_time, is_fact)
-    # Compute Q scores
-
-    # Compute S scores
-
-    # Save df
-
-
-    # Process the posted data (e.g., record the answer and time taken)
-    # For this example, we'll just send back a confirmation
-    # Process the posted data (e.g., record the answer and time taken)
-    # For this example, we'll just send back a confirmation
-    return jsonify({"message": "Response recorded"})
-
-
-@app.route('/explain', methods=['GET'])
-def explain():
-    try:
-        # Extract questionId from query parameters
-        question_id = request.args.get('questionId', type=int)
-
-        # Retrieve the question from the dataframe
-        if question_id in df.index:
-            question = df.loc[question_id, 'question']
-        else:
-            return jsonify({'error': 'Question ID not found'}), 404
-
-        # Generate the explanation
-        explanation = generate_explanation(question)
-
-        # Return the explanation in the response
-        return jsonify({'explanation': explanation})
-    except Exception as e:
-        # Handle any unexpected errors
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/lessonSummary', methods=['GET'])
-def lesson_summary():
-    try:
-        # Extract lessonId from query parameters
-        lesson_id = request.args.get('lessonId', type=int)
-
-        # Retrieve the list of question IDs for the given lesson ID
-        question_ids = lesson_questions.get(lesson_id)
-        if question_ids is None:
-            return jsonify({'error': 'Lesson ID not found'}), 404
-
-        # Retrieve the questions from the dataframe and concatenate them
-        questions = df[df['id'].isin(question_ids)]['question'].tolist()
-        questions_str = " ".join(questions)
-
+        response_time = response_times[idx]
+        is_fact = bool(question_row['fact_bool']) 
+        question_z_scores = question_row['z_scores']
+        z_score_new = calc_z_score(question, answer, response, response_time, is_fact)
+        question_z_scores.append(z_score_new)
+        
+        current_z_scores.append(question_z_scores)
+        # Compute Q scores
+        embeddings = df.loc[question_id, 'embeddings']
+        Q_scores = compute_Q_scores(embeddings, current_z_scores)
+        
+        S_scores = 
         # Generate the summary
         summary = generate_summary(questions_str)
 
