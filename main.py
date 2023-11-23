@@ -94,7 +94,7 @@ def post_question():
         current_z_scores.append(question_z_scores)
     
     # Compute Q scores
-    embeddings = df.loc[question_id, 'embeddings']
+    embeddings = df.loc[question_id, 'embedding']
     Q_scores = compute_Q_scores(embeddings, current_z_scores)
     S_scores = get_schedule_scores(df,lesson_id)
 
