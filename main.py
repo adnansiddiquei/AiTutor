@@ -1,5 +1,10 @@
 from flask import Flask, jsonify, request
 from utils import *
+import json
+from ast import literal_eval
+import numpy as np
+from sklearn.manifold import TSNE
+import pandas as pd
 
 # Load the dataframe
 df = pd.read_pickle('data_full.pkl')
@@ -95,9 +100,9 @@ def prepare_data(data):
     response_data = []
     for idx, (x_coord, y_coord) in enumerate(vis_dims):
         response_data.append({
-            "x": x_coord,
-            "y": y_coord,
-            "zScore": data['z_scores'][idx][-1],  # Assuming the last entry in each array
+            "x": float(x_coord),  # Convert to native Python float
+            "y": float(y_coord),  
+            "zScore": float(data['z_scores'][idx][-1]),  
             "category": data['_category'][idx]
         })
 
@@ -106,7 +111,7 @@ def prepare_data(data):
 @app.route('/visualise', methods=['GET'])
 def visualise():
     response_data = prepare_data(df)
-    return jsonify(response_data)
+    return response_data
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
