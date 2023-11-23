@@ -50,5 +50,14 @@ spec = [
         response: {
             explanation: 'Lorem ipsum dolor...'
         }
+    },
+    
+    {
+        method: 'GET',
+        endpoint: '/visualise',
+        response: [
+            {x:5, y:10, zScore: 0.4, category: 'Quantitave finance'},
+            {x:5, y:10, zScore: 0.4, category: 'Quantitave finance'},
+        ]
     }
 ]
