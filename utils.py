@@ -7,7 +7,8 @@ import torch
 from tqdm.auto import tqdm
 import matplotlib.pyplot as plt
 
-
+from openai import OpenAI
+import os
 import numpy as np
 import pandas as pd
 import random
@@ -502,3 +503,46 @@ def calc_z_score(question, answer, response, response_time, is_fact):
         # reasoning based question, calculate z score based on time taken to answer
         # if thinking proportion high - question was challenging, not punished for very long vs slightly long
         return understanding_time/response_time
+    
+
+def generate_summary(questions):
+    '''Generate a short lesson on the questions covered in the next lesson.
+    Feed in the text of the questions to generate the lesson on. Returns a string'''
+    
+    client = OpenAI()
+
+    response = client.chat.completions.create(
+        model = "gpt-4",
+        messages = [
+            {"role": "system", "content":'''The 'CFA Concept Simplifier' GPT is designed to create small lessons based on financial 
+            concepts commonly covered in the CFA Level 1 exam, without referring directly to specific exam questions. 
+
+            For each lesson, it will be provided with a list of questions and answers, from which it should infer the
+            high-level concepts necessary to answer these questions. 
+
+            Using this structure, it will generate a short lesson focusing on explaining the relevant key financial 
+            concepts in a concise, 5-minute summary format. The GPT adopts a friendly tone and practical examples, but is not afriad to use technically jargon. 
+            The aim is to assist users in understanding essential financial concepts, making the material engaging and accessible for those preparing 
+            for the CFA exam or enhancing their financial knowledge. At no point should there be reference to the questions provided for context.'''},
+            { "role": "user", "content": f"Generate a lesson, using the following questions as context: {questions}" }, 
+        ]
+    )
+    return response.choices[0].message.content
+
+
+def generate_explanation(question):
+    '''Generates an explanation of a particular question. Input/output are strings.'''
+    
+    client = OpenAI()
+
+    response = client.chat.completions.create(
+        model = "gpt-4",
+        messages = [
+            {"role": "system", "content":'''This GPT is designed to teach students about 
+            concepts commonly covered in the CFA Level 1 exam.
+             
+             Given a question the student is struggling with, generate an in-depth explanation of the concepts behind it'''},
+            { "role": "user", "content": f"Explain this question: {question}" }, 
+        ]
+    )
+    return response.choices[0].message.content

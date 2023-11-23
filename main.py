@@ -42,7 +42,7 @@ def post_question():
     time_taken = data.get('timeTaken')
     response_times = data.get('responseTime')
     lesson_id = data.get('lessonId')
-    
+
     # Compute z scores
     current_z_scores = []
     for idx,id_ in enumerate(question_id):
@@ -60,16 +60,26 @@ def post_question():
         embeddings = df.loc[question_id, 'embeddings']
         Q_scores = compute_Q_scores(embeddings, current_z_scores)
         
-        S_scores = 
+        
+        S_scores = get_schedule_scores(df,lesson_id)
+    
+        # save Q and S scores
+        df.loc[question_id, 'Q_scores'] = Q_scores
+        df.loc[question_id, 's_scores'] = S_scores
+        
+        # save to pickle
+        df.to_pickle('data_full.pkl')
+
         # Generate the summary
         summary = generate_summary(questions_str)
 
+        # save summary as summary txt file
+        with open('summary.txt', 'w') as f:
+            f.write(summary)
+        
         # Return the summary in the response
         return jsonify({'summary': summary})
-    except Exception as e:
-        # Handle any unexpected errors
-        return jsonify({'error': str(e)}), 500
-
+    
 def prepare_data(data):
     matrix = np.array(data['embedding'].apply(json.dumps).apply(literal_eval).to_list())
     tsne = TSNE(n_components=2, perplexity=15, random_state=42, init='random', learning_rate=200)
