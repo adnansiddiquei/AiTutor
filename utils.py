@@ -90,7 +90,7 @@ filter_out_flags = []
 
 
 def get_schedule_scores(df, z_scores_array, lesson_id):
->>>>>>> 368cd0f2de6714fc8cc343967d6b0e2119623450
+
     '''Gets a df that contains id of question and schedule_scores for each one.
     Input takes the full df and the lesson_id, or the number of days since the beginning of the course.
     FSRS uses a calculated stability metric, which is how "stable" the idea is in your mind,
