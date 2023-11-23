@@ -1,0 +1,114 @@
+﻿id,_notes,questions,options
+65,Derivatives,"As compared to exchange-traded derivatives, over-the-counter derivatives are more likely to have:","A. lower credit risk.
+B. customized contract terms.
+C. lower risk management uses."
+66,Equity Investments,"A financial system characterized by liquid markets, low commissions and order price impacts is said to be which of the following?","A. Allocationally eﬃcient.
+B. Informationally eﬃcient.
+C. Operationally eﬃcient."
+67,Equity Investments,Which of the following is least likely a pooled investment vehicle?,"A. Asset-backed securities.
+B. Convertible debt.
+C. Hedge funds."
+68,Equity Investments,"A mutual fund invests primarily in ﬁxed-income securities. Which of the following is least likely to
+be a part of this fund?","A. Warrants.
+B. Treasury bills.
+C. Repurchase agreements."
+69,Equity Investments,"On the basis of market, ﬁxed income indices can be least likely classiﬁed as:","A. global.
+B. currency zone.
+C. investment grade."
+70,Equity Investments,The index weighting method that requires adjustment to the divisor after a stock split is:,"A. price weighting.
+B. equal weighting.
+C. ﬂoat adjusted market-capitalization weighting."
+71,Equity Investments,"Which of the following statements most accurately depict a company pursuing the differentiation
+strategy?","A. Strong market research teams to match customer needs with product development.
+B. Tight cost controls with highly eﬃcient operating and reporting systems.
+C. Investment in productivity improving capital equipment."
+72,Equity Investments,"Which of the following characteristics is most likely to be exhibited by the industry that is
+experiencing intense competitive rivalry among incumbent companies?","A. Customers basing purchase decisions largely on price.
+B. Small number of suppliers with high bargaining power.
+C. Substitute products available with low exit barriers."
+74,Equity Investments,Which of the following statements is incorrect about FCFE model?,"A. FCFE is a measure of a ﬁrm’s expected dividends.
+B. It can also be used for a non-dividend paying stock unlike DDM which requires the timing and the amount of the ﬁrst dividend to be paid. 
+C. Not all of the available cash ﬂow is distributed to shareholders because a company retains
+some part of it for future investments as a going concern."
+75,Equity Investments,"K-Electric Power Company is a power generation company, while Procter and Gamble is a
+consumer products company and Toyota Motors is an automobile manufacturing company.
+Which of the following is most likely to issue special dividends for sharing proﬁts with shareholders
+in times of proﬁtability, but conserve cash otherwise?","A. K-Electric Power Company.
+B. Procter and Gamble.
+C. Toyota Motors."
+76,Fixed Income,"Many issuers roll over their commercial papers on a regular basis. To reduce roll over risk they are
+usually required to:","A. have suﬃcient T-bills as collateral.
+B. apply for a bilateral loan.
+C. maintain backup lines of credit with banks."
+77,Fixed Income,"Party A sells a 90-day T-bill to Party B for USD 99.85 with a commitment to by the T-bill back the
+next day for USD 99.87. From the perspective of Party B this transaction can be referred to as a:","A. repo agreement.
+B. reverse repo agreement.
+C. forward rate agreement."
+78,Fixed Income,"The price of a bond issued in Singapore by an American company and denominated in
+Singaporean dollars is most likely to:","A. change as Singapore’s interest rates change.
+B. change as U.S interest rates change.
+C. be unaffected by changes in U.S. and Singaporean interest rates."
+79,Fixed Income,The bond is most likely to be priced at a premium above par value when:,"A. Coupon rate < Market discount rate.
+B. Coupon rate = Market discount rate.
+C. Coupon rate > Market discount rate."
+80,Fixed Income,"The method to estimate the required yield to maturity of bonds that have low liquidity or that are
+not traded is most likely called:","A. mix pricing.
+B. matrix pricing.
+C. average pricing."
+81,Fixed Income,What does the notation 5y3y most likely represent?,"A. 3 year loan to be made after 5 years.
+B. 5 year loan to be made after 3 years.
+C. 5 year loan to be made at 3 year yield."
+82,Fixed Income,"A principal repayment of EUR 1 billion on the collateral of a EUR 10 billion face value
+non-amortizing asset backed security, during the lockout period will result in the security having a
+total face value of:","A. EUR 9 billion.
+B. EUR 10 billion.
+C. EUR 11 billion."
+83,Fixed Income,"Charles Dent obtains a non-recourse loan for USD 200,000. A year later the principal on the loan is
+USD 180,000 and Charles defaults on the loan. The lender forecloses and sells the house for USD
+150,000. What amount is the lender entitled to claim from Charles?","A. USD0.
+B. USD30,000.
+C. USD50,000."
+84,Fixed Income,"Which of the following is an important consideration of non-agency residential mortgage-backed
+security (RMBS) as compared to an agency RMBS?","A. Credit risk.
+B. Extension risk.
+C. Contraction risk"
+85,Fixed Income,"Consider a CMO with three sequential pay tranches A, B and C. The average lives for the tranches
+are 4.6, 10.3, and 15.0 years respectively under a 150 PSA assumption. An investor concerned
+about contraction risk is most likely to invest in:","A. tranche A.
+B. tranche B.
+C. tranche C."
+86,Portfolio Management and Wealth Planning,"Which of the following combinations is most likely to have its portfolio’s risk and return presented
+in the form of the capital market line, CML?","A. Risk-free asset and market portfolio.
+B. Risk-free asset and any risky portfolio.
+C. Risky asset and a leveraged portfolio"
+87,Portfolio Management and Wealth Planning,"Which of the following assumptions of the capital market theory allows for optimal risky portfolio
+i.e. market portfolio to exist?","A. All investors plan for the same holding period
+B. All investors are price takers
+C. All investors have homogeneous expectations"
+88,Portfolio Management and Wealth Planning,Which of the following is not an example of model risk?,"A. Using the one-year risk-free rate to discount the face value of a one-year government bond.
+B. Assuming the tails of a returns distribution are thin when they are, in fact, fat.
+C. Using standard deviation to measure risk when the returns distribution is asymmetric.
+89. Portfolio Management and Wealth Planning
+If a company has a one-day 10% Value at Risk of USD1 million, this means:
+A. 10% of the time the ﬁrm is expected to lose at least USD1 million in one day.
+B. 90% of the time the ﬁrm is expected to lose at least USD1 million in one day.
+C. 10% of the time the ﬁrm is expected to lose no more than USD1 million in one day.
+90. Portfolio Management and Wealth Planning
+One of the key advantages of technical analysis over fundamental analysis is that:
+A. technical analysts have actual and observable data available to arrive at the results.
+B. technical analysis incorporates the relevant economic data to arrive at the results.
+C. technical analysis can be effectively put into use for thinly traded stocks.
+89,Portfolio Management and Wealth Planning,"If a company has a one-day 10% Value at Risk of USD1 million, this means:","A. 10% of the time the ﬁrm is expected to lose at least USD1 million in one day.
+B. 90% of the time the ﬁrm is expected to lose at least USD1 million in one day.
+C. 10% of the time the ﬁrm is expected to lose no more than USD1 million in one day."
+90,Portfolio Management and Wealth Planning,One of the key advantages of technical analysis over fundamental analysis is that:,"A. technical analysts have actual and observable data available to arrive at the results.
+B. technical analysis incorporates the relevant economic data to arrive at the results.
+C. technical analysis can be effectively put into use for thinly traded stocks."
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
