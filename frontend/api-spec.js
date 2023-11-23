@@ -26,14 +26,7 @@ spec = [
                 'portfolios managed according to a similar investment strategy.'
             ],
             correctAnswer: 0, // the position in the array which is the correct answer
-            lessonFinished: false
-        }
-    },
-    { // when the lesson is finished
-        method: 'GET',
-        endpoint: '/question',
-        response: {
-            lessonFinished: true
+            lessonFinished: false // this should be true if it is the last question
         }
     },
 
