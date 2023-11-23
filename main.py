@@ -16,6 +16,7 @@ CORS(app)
 @app.route('/question', methods=['GET'])
 def get_question():
     # Extract parameters
+    df = pd.read_pickle('data_full.pkl')
     lesson_id = request.args.get('lessonId', type=int)
     question_number = request.args.get('questionNumber', type=int)
     
