@@ -7,104 +7,15 @@ import torch
 from tqdm.auto import tqdm
 import matplotlib.pyplot as plt
 
-def cosine_distance(a, b):
-    cosine_similarity = np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
-    return 1 - cosine_similarity
 
-def compute_Q_scores(embeddings, current_z_scores):
-    
-    # compute Q score for each question
-        Q_scores = []
-        # compute the cosine distance between embedding i and all others
-        inv_cosine_similarities = np.zeros((embeddings.shape[0],embeddings.shape[0]))
-        for i in range(embeddings.shape[0]):
-            # TODO: Make this loop more efficient
-            for j in range(0,embeddings.shape[0]):
-                if j == i or np.isnan(current_z_scores[j]):
-                    inv_cosine_similarities[i,j] = np.nan
-                else:
-                    d_i_j = cosine_distance(embeddings[i], embeddings[j])
-                    inv_cosine_similarities[i,j] = 1/d_i_j
-                    inv_cosine_similarities[j,i] = 1/d_i_j
-
-        # normalise inv_cosine_similarities
-        max_val = np.nanmax(inv_cosine_similarities)
-        min_val = np.nanmin(inv_cosine_similarities)
-
-        normalised_inv_cosine_similarities = (inv_cosine_similarities - min_val)/(max_val - min_val)
-        total_normalised_inv_cosine_similarities = np.nansum(normalised_inv_cosine_similarities)/2
-        for i in range(embeddings.shape[0]):
-            # compute Q score for question i
-            Q_score_i = 0
-            for j in range(embeddings.shape[0]):
-                if j != i and not np.isnan(current_z_scores[j]):
-                    Q_score_i += normalised_inv_cosine_similarities[i,j]/(total_normalised_inv_cosine_similarities) * current_z_scores[j]
-            Q_scores.append(Q_score_i)
-
-        # normalise Q scores
-        max_val = np.nanmax(Q_scores)
-        min_val = np.nanmin(Q_scores)
-        Q_scores = (Q_scores - min_val)/(max_val - min_val)
-        
-        return Q_scores
-
-
-def calc_z_score(question, answer, response, response_time, is_fact):
-    """
-    Calculate the z-score for a given question and response.
-
-    Idea is that if fact based the logic is binary - either you know the answer or you don't.
-    If you know set a low z score of 0.1 - answer memorised
-    If you don't know set a neutral z score of 0.5 - answer guessed
-
-    If reasoning based, the z score is calculated based on proportion of time spent thinking about the question out of total time taken to answer.
-    regardless of true or false. Idea is that if it takes a long time to answer, even if you are correct it was hard for you.
-
-
-    Over several askings of a question should trigger the memorisation loop where 
-
-    Parameters:
-    question (str): The question asked.
-    answer (str): The correct answer to the question.
-    response (str): The response given by the student.
-    response_time (float): The time taken by the student to respond in seconds.
-    is_fact (bool): Fact based True or False.
-
-    Returns:
-    float: The z-score calculated based on the response time.
-    """
-    # count number of words in question and adjust response time
-    question_length = len(question.split())
-
-    # use an avg reading rate of 200 words per minute
-    reading_time = 60 * (question_length / 200)
-    understanding_time = response_time - reading_time
-    
-    # if negative understanding time, question was answered without much thought - answer known or guessed
-    if understanding_time < 0:
-        understanding_time = 0
-        # if wrong, assume answer was guessed and set a neutral z score
-        if response != answer:
-            return 0.5
-        # if correct, assume answer was memorised and set a z score of 0.1
-        if response == answer:
-            return 0.1
-
-    # if fact_based question and correct answer, assume answer was known and set a neutral z score
-    if is_fact:
-        if response == answer:
-            # add logic here to think about how many times person has seen this
-            # rn will just run this till answer is memorised and prev loop is run so z score is 0.1
-            return 0.1
-        else:
-            return 0.5
-    
-    else:
-        # reasoning based question, calculate z score based on time taken to answer
-        # if thinking proportion high - question was challenging, not punished for very long vs slightly long
-        return understanding_time/response_time
-
-
+import numpy as np
+import pandas as pd
+import random
+from sklearn.preprocessing import MinMaxScaler
+from fsrs_optimizer import lineToTensor, FSRS
+import torch
+from tqdm.auto import tqdm
+import matplotlib.pyplot as plt
 # Necessary Input:
 # z_score - only for questions that have been asked
 # asked questions to put into scheduler
@@ -140,9 +51,20 @@ filter_out_suspended_cards = False
 # Red: 1, Orange: 2, Green: 3, Blue: 4, Pink: 5, Turquoise: 6, Purple: 7
 # Set it to [1, 2] if you don't want the optimizer to use the review logs from cards with red or orange flag.
 filter_out_flags = []
-
+    
 
 def get_schedule_scores(df, lesson_id):
+    '''Gets a df that contains id of question and schedule_scores for each one.
+    Input takes the full df and the lesson_id, or the number of days since the beginning of the course.
+    FSRS uses a calculated stability metric, which is how "stable" the idea is in your mind,
+    and schedules the next occurence of the card. We then scale this and normalize to give an output number
+    showing how urgent the card is, with 1 being the most urgent.
+    This is simply a time-series model with Markov property:
+    Depending on half-life, recall probability, result of recall, and difficulty, we define
+    a memory state-transition equation to update at every step.
+    We combine this with a Stochastic Shortest Path problem - the number of reviews required for memorizing something
+    to the require half-life is uncertain, so we combine the SSP and MMC to
+    find the optimal review time over iterations.'''
     deck_size = len(df)
     def calculate_review_duration(states, times):
         if states[-1] != 2:
@@ -158,11 +80,29 @@ def get_schedule_scores(df, lesson_id):
     df['review_duration'] = [calculate_review_duration(s, t) for s, t in zip(df['review_state'], df['review_time'])]
 
     # Define the bins for the intervals
-    bins = [0.25, 0.5, 0.75]
+    # bins = [0.25, 0.5, 0.75]
+    # df['z_score_last'] = df['z_scores'].apply(lambda x: x[-1] if isinstance(x, list) and x else np.nan)
+    # # Use numpy's digitize method to convert z_scores to review_rating
+    # df['review_rating'] = np.digitize(df['z_score_last'], bins) + 1
+    # df['review_rating'] = 5 - df['review_rating']
 
-    # Use numpy's digitize method to convert z_scores to review_rating
-    df['review_rating'] = np.digitize(df['z_scores'], bins) + 1
-    df['review_rating'] = 5 - df['review_rating']
+    def assign_rating(row):
+        # Extract the last z_score value
+        z_score = row['z_scores'][-1] if isinstance(row['z_scores'], list) and row['z_scores'] else None
+        
+        # Assign ratings based on z_score
+        if z_score is not None:
+            if z_score <= 0.25:
+                return 1
+            elif z_score <= 0.5:
+                return 2
+            elif z_score <= 0.75:
+                return 3
+            else:
+                return 4
+        else:
+            return None  # or some default value
+    df['review_rating'] = df.apply(assign_rating, axis=1) 
     df['review_time_curr'] = df['review_time'].apply(lambda x: x[-1])
     df['review_state_curr'] = df['review_state'].apply(lambda x: x[-1])
     New = 0
@@ -409,3 +349,103 @@ def get_schedule_scores(df, lesson_id):
     # Returning the DataFrame with 'id' and 'schedule_score'
     result = card[['id', 'schedule_score']]
     return result
+
+def cosine_distance(a, b):
+    cosine_similarity = np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+    return 1 - cosine_similarity
+
+def compute_Q_scores(embeddings, current_z_scores):
+    
+    # compute Q score for each question
+        Q_scores = []
+        # compute the cosine distance between embedding i and all others
+        inv_cosine_similarities = np.zeros((embeddings.shape[0],embeddings.shape[0]))
+        for i in range(embeddings.shape[0]):
+            # TODO: Make this loop more efficient
+            for j in range(0,embeddings.shape[0]):
+                if j == i or np.isnan(current_z_scores[j]):
+                    inv_cosine_similarities[i,j] = np.nan
+                else:
+                    d_i_j = cosine_distance(embeddings[i], embeddings[j])
+                    inv_cosine_similarities[i,j] = 1/d_i_j
+                    inv_cosine_similarities[j,i] = 1/d_i_j
+
+        # normalise inv_cosine_similarities
+        max_val = np.nanmax(inv_cosine_similarities)
+        min_val = np.nanmin(inv_cosine_similarities)
+
+        normalised_inv_cosine_similarities = (inv_cosine_similarities - min_val)/(max_val - min_val)
+        total_normalised_inv_cosine_similarities = np.nansum(normalised_inv_cosine_similarities)/2
+        for i in range(embeddings.shape[0]):
+            # compute Q score for question i
+            Q_score_i = 0
+            for j in range(embeddings.shape[0]):
+                if j != i and not np.isnan(current_z_scores[j]):
+                    Q_score_i += normalised_inv_cosine_similarities[i,j]/(total_normalised_inv_cosine_similarities) * current_z_scores[j]
+            Q_scores.append(Q_score_i)
+
+        # normalise Q scores
+        max_val = np.nanmax(Q_scores)
+        min_val = np.nanmin(Q_scores)
+        Q_scores = (Q_scores - min_val)/(max_val - min_val)
+        
+        return Q_scores
+
+
+def calc_z_score(question, answer, response, response_time, is_fact):
+    """
+    Calculate the z-score for a given question and response.
+
+    Idea is that if fact based the logic is binary - either you know the answer or you don't.
+    If you know set a low z score of 0.1 - answer memorised
+    If you don't know set a neutral z score of 0.5 - answer guessed
+
+    If reasoning based, the z score is calculated based on proportion of time spent thinking about the question out of total time taken to answer.
+    regardless of true or false. Idea is that if it takes a long time to answer, even if you are correct it was hard for you.
+
+
+    Over several askings of a question should trigger the memorisation loop where 
+
+    Parameters:
+    question (str): The question asked.
+    answer (str): The correct answer to the question.
+    response (str): The response given by the student.
+    response_time (float): The time taken by the student to respond in seconds.
+    is_fact (bool): Fact based True or False.
+
+    Returns:
+    float: The z-score calculated based on the response time.
+    """
+    # count number of words in question and adjust response time
+    question_length = len(question.split())
+
+    # use an avg reading rate of 200 words per minute
+    reading_time = 60 * (question_length / 200)
+    understanding_time = response_time - reading_time
+    
+    # if negative understanding time, question was answered without much thought - answer known or guessed
+    if understanding_time < 0:
+        understanding_time = 0
+        # if wrong, assume answer was guessed and set a neutral z score
+        if response != answer:
+            return 0.5
+        # if correct, assume answer was memorised and set a z score of 0.1
+        if response == answer:
+            return 0.1
+
+    # if fact_based question and correct answer, assume answer was known and set a neutral z score
+    if is_fact:
+        if response == answer:
+            # add logic here to think about how many times person has seen this
+            # rn will just run this till answer is memorised and prev loop is run so z score is 0.1
+            return 0.1
+        else:
+            return 0.5
+    
+    else:
+        # reasoning based question, calculate z score based on time taken to answer
+        # if thinking proportion high - question was challenging, not punished for very long vs slightly long
+        return understanding_time/response_time
+
+
+#

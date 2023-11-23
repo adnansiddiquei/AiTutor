@@ -1,25 +1,19 @@
 from flask import Flask, jsonify, request
-from part_5.gpt_explainer import generate_explanation
+from utils import *
+
+# Load the dataframe
+df = pd.read_pickle('data_full.pkl')
+
 app = Flask(__name__)
 
-@app.route('/lessonSummary', methods=['GET'])
-def lesson_summary():
-    # Extract parameters from request (if needed)
-    lesson_id = request.args.get('lessonId', type=int)
-
-    # Normally, here you'd fetch or compute the summary data
-    response = {
-        "summary": "Lorem ipsum dolor sit amet..."
-    }
-    return jsonify(response)
 
 @app.route('/question', methods=['GET'])
 def get_question():
     # Extract parameters
     lesson_id = request.args.get('lessonId', type=int)
     question_number = request.args.get('questionNumber', type=int)
-
-    # Fetch or compute the question data
+    
+    question = df.loc[question_number] 
     response = {
         "id": "17",
         "question": "Which of the following is not a requirement of GIPS for composite construction?",
@@ -31,6 +25,7 @@ def get_question():
         "correctAnswer": 0,
         "lessonFinished": True
     }
+
     return jsonify(response)
 
 @app.route('/question', methods=['POST'])
@@ -45,16 +40,6 @@ def post_question():
     # For this example, we'll just send back a confirmation
     return jsonify({"message": "Response recorded"})
 
-@app.route('/explain', methods=['GET'])
-def explain():
-    # Extract parameters
-    question_id = request.args.get('questionId', type=int)
-
-    # Fetch or compute the explanation
-    response = {
-        "explanation": "Lorem ipsum dolor..."
-    }
-    return jsonify(response)
 
 @app.route('/explain', methods=['GET'])
 def explain():
@@ -102,4 +87,4 @@ def lesson_summary():
         return jsonify({'error': str(e)}), 500
     
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
