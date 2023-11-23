@@ -71,6 +71,18 @@ def post_question():
         # save to pickle
         df.to_pickle('data_full.pkl')
 
+        question_ids = question_id.tolist()
+        if question_ids is None:
+            return jsonify({'error': 'Lesson ID not found'}), 404
+
+        # Retrieve the questions from the dataframe and concatenate them
+        questions = df[df['id'].isin(question_ids)]['question'].tolist()
+        questions_str = " ".join(questions)
+
+        # Generate the summary
+        summary = generate_summary(questions_str)
+
+
         # Generate the summary
         summary = generate_summary(questions_str)
 
@@ -105,20 +117,9 @@ def explain():
 @app.route('/lessonSummary', methods=['GET'])
 def lesson_summary():
     try:
-        # Extract lessonId from query parameters
-        lesson_id = request.args.get('lessonId', type=int)
-
-        # Retrieve the list of question IDs for the given lesson ID
-        question_ids = lesson_questions.get(lesson_id)
-        if question_ids is None:
-            return jsonify({'error': 'Lesson ID not found'}), 404
-
-        # Retrieve the questions from the dataframe and concatenate them
-        questions = df[df['id'].isin(question_ids)]['question'].tolist()
-        questions_str = " ".join(questions)
-
-        # Generate the summary
-        summary = generate_summary(questions_str)
+        # read summary from txt file
+        with open('summary.txt', 'r') as f:
+            summary = f.read()
 
         # Return the summary in the response
         return jsonify({'summary': summary})
