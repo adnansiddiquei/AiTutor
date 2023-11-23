@@ -2,6 +2,9 @@ spec = [
     {
         method: 'GET',
         endpoint: '/lessonSummary',
+        params: {
+            lessonId: 1
+        },
         response: {
             summary: 'Lorem ipsum dolor sit amet...'
         }
@@ -10,15 +13,19 @@ spec = [
     {
         method: 'GET',
         endpoint: '/question',
+        params: {
+            lessonId: 1,
+            questionNumber: 4
+        },
         response: {
-            id: 'ae9b82d3-6c90-483f-897c-936fb86b42bb',
+            id: '17',
             question: 'Which of the following is not a requirement of GIPS for composite construction?',
             answers: [
                 'one or more portfolios.',
                 'portfolios selected on an ex-post basis.',
                 'portfolios managed according to a similar investment strategy.'
             ],
-            correctAnswer: 0 // the position in the array which is the correct answer
+            correctAnswer: 0, // the position in the array which is the correct answer
             lessonFinished: false
         }
     },
@@ -35,8 +42,8 @@ spec = [
         method: 'POST',
         endpoint: '/question',
         data: {
-            id: 'ae9b82d3-6c90-483f-897c-936fb86b42bb', // question id
-            answer: 1,
+            id: '17', // question id
+            answer: 1,  // their answer
             timeTaken: 23  // in seconds
         }
     }
