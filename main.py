@@ -40,9 +40,16 @@ def post_question():
     question_id = data.get('id')
     answer = data.get('answer')
     time_taken = data.get('timeTaken')
+    response_time = data.get('responseTime')
 
     # Compute z scores
-    z_scores = calc_z_scores(df, question_id, answer, time_taken)
+    for idx,id_ in enumerate(question_id):
+        question_row = df.loc[id_]
+        question = question_row['question']
+        response = answer[idx]
+        response_time = time_taken[idx]
+
+        calc_z_score(question, answer, response, response_time, is_fact)
     # Compute Q scores
 
     # Compute S scores
