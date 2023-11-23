@@ -1,6 +1,7 @@
 import './App.css';
 import ScatterPlot from "./components/ScatterPlot.js";
 import {useEffect, useState} from "react";
+import Dropdown from  './components/Dropdown.js'
 
 function App() {
   // const data = [
@@ -12,11 +13,12 @@ function App() {
   // ];
   
   const [data, setData] = useState(null)
+  const [lesssonId, setLessonId] = useState(0)
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8080/visualise');
+        const response = await fetch(`http://127.0.0.1:8080/visualise?lessonId=${lesssonId}`);
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
@@ -32,7 +34,10 @@ function App() {
   
   return (
     <div className="App">
-      {data && <ScatterPlot data={data} />}
+      <div>
+        {data && <ScatterPlot data={data} />}
+        <Dropdown lessonId={lesssonId} setLessonId={setLessonId}></Dropdown>
+      </div>
     </div>
   );
 }

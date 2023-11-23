@@ -6,8 +6,6 @@ import numpy as np
 from sklearn.manifold import TSNE
 import pandas as pd
 
-# Load the dataframe
-df = pd.read_pickle('data_full.pkl')
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -16,18 +14,17 @@ CORS(app)
 @app.route('/question', methods=['GET'])
 def get_question():
     # Extract parameters
-    df = pd.read_pickle('data_full.pkl')
     lesson_id = request.args.get('lessonId', type=int)
     question_number = request.args.get('questionNumber', type=int)
+    df = pd.read_pickle(f'data_full_{lesson_id}.pkl')
+
     
     if lesson_id == 0:
         # Retrieve 10 random questions from the dataframe
         question_ids = df.sample(10)['id'].tolist()
 
     else:
-        df = pd.read_pickle('data_full.pkl')
-
-        # count number of nans in the z score column 
+        # count number of nans in the z score column
         no_unasked_qs = df['z_scores'].isna().sum()
         prop_answered = no_unasked_qs/len(df)
         prop_answered = np.ceil(prop_answered)
@@ -43,7 +40,7 @@ def get_question():
     for idx,question_id in enumerate(question_ids):
         question_row = df.loc[question_id]
         question = question_row['question']
-        answers = question_row['answers']
+        answers = question_row['options']
         correct_answer = 0
         lesson_finished = False
 
@@ -52,22 +49,23 @@ def get_question():
             "question": question,
             "answers": answers,
             "correctAnswer": correct_answer,
-            "lessonFinished": True if idx==9 else False
+            "lessonFinished": True if question_number==9 else False
     }
 
     return jsonify(response)
 
 @app.route('/question', methods=['POST'])
 def post_question():
-    df = pd.read_pickle('data_full.pkl')
-    
     # Extract data from request
     data = request.json
     question_id = [entry.get('id') for entry in data]
     answer = [entry.get('answer') for entry in data]
     response_times = [entry.get('responseTime') for entry in data]
     lesson_id = [entry.get('lessonId') for entry in data]
-    
+
+    df = pd.read_pickle(f'data_full_{lesson_id[0]}.pkl')
+    df['fact_bool'] = np.random.choice([True, False], df.shape[0], p=[0.2, 0.8])
+
     # Compute z scores
     current_z_scores = []
     for idx,id_ in enumerate(question_id):
@@ -82,7 +80,7 @@ def post_question():
         
         current_z_scores.append(question_z_scores)
         # Compute Q scores
-        embeddings = df.loc[question_id, 'embeddings']
+        embeddings = np.asarray(df.loc[id_, 'embedding'])
         Q_scores = compute_Q_scores(embeddings, current_z_scores)
         S_scores = get_schedule_scores(df,lesson_id)
     
@@ -91,7 +89,7 @@ def post_question():
         df.loc[question_id, 's_scores'] = S_scores
         
         # save to pickle
-        df.to_pickle('data_full.pkl')
+        df.to_pickle(f'data_full_{lesson_id[0] + 1}.pkl')
 
         question_ids = question_id.tolist()
         if question_ids is None:
@@ -114,6 +112,9 @@ def post_question():
     
 @app.route('/explain', methods=['GET'])
 def explain():
+    lesson_id = request.args.get('lessonId', type=int)
+    df = pd.read_pickle(f'data_full_{lesson_id[0]}.pkl')
+
     try:
         # Extract questionId from query parameters
         question_id = request.args.get('questionId', type=int)
@@ -165,6 +166,8 @@ def prepare_data(data):
 
 @app.route('/visualise', methods=['GET'])
 def visualise():
+    lesson_id = request.args.get('lessonId', type=int)
+    df = pd.read_pickle(f'data_full_{lesson_id}.pkl')
     response_data = prepare_data(df)
     return jsonify(response_data)
 
