@@ -4,8 +4,10 @@ import json
 from ast import literal_eval
 import numpy as np
 from sklearn.manifold import TSNE
+import pandas as pd
 app = Flask(__name__)
 
+df = pd.read_pickle('data_full.pkl')
 @app.route('/lessonSummary', methods=['GET'])
 def lesson_summary():
     # Extract parameters from request (if needed)
