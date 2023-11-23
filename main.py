@@ -1,5 +1,9 @@
 from flask import Flask, jsonify, request
 from part_5.gpt_explainer import generate_explanation
+import json
+from ast import literal_eval
+import numpy as np
+from sklearn.manifold import TSNE
 app = Flask(__name__)
 
 @app.route('/lessonSummary', methods=['GET'])
@@ -100,6 +104,28 @@ def lesson_summary():
     except Exception as e:
         # Handle any unexpected errors
         return jsonify({'error': str(e)}), 500
-    
+
+def prepare_data(data):
+    matrix = np.array(data['embedding'].apply(json.dumps).apply(literal_eval).to_list())
+    tsne = TSNE(n_components=2, perplexity=15, random_state=42, init='random', learning_rate=200)
+    vis_dims = tsne.fit_transform(matrix)
+
+    # Preparing the response data
+    response_data = []
+    for idx, (x_coord, y_coord) in enumerate(vis_dims):
+        response_data.append({
+            "x": x_coord,
+            "y": y_coord,
+            "zScore": data['z_scores'][idx][-1],  # Assuming the last entry in each array
+            "category": data['_category'][idx]
+        })
+
+    return response_data
+
+@app.route('/visualise', methods=['GET'])
+def visualise():
+    response_data = prepare_data(df)
+    return jsonify(response_data)
+
 if __name__ == '__main__':
     app.run(debug=True)
