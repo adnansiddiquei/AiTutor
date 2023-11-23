@@ -43,7 +43,7 @@ filter_out_suspended_cards = False
 filter_out_flags = []
 
 
-def get_schedule_scores(df, date):
+def get_schedule_scores(df, lesson_id):
     deck_size = len(df)
     def calculate_review_duration(states, times):
         if states[-1] != 2:
@@ -224,7 +224,7 @@ def get_schedule_scores(df, date):
         student = Collection()
         random.seed(2022)
         # do 1 step:
-        day = date
+        day = lesson_id
         reviewed = 0
         learned = 0
         review_time_today = 0
