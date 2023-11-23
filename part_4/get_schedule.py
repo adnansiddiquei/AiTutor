@@ -70,11 +70,29 @@ def get_schedule_scores(df, lesson_id):
     df['review_duration'] = [calculate_review_duration(s, t) for s, t in zip(df['review_state'], df['review_time'])]
 
     # Define the bins for the intervals
-    bins = [0.25, 0.5, 0.75]
-    df['z_score_last'] = df['z_scores'].apply(lambda x: x[-1] if isinstance(x, list) and x else np.nan)
-    # Use numpy's digitize method to convert z_scores to review_rating
-    df['review_rating'] = np.digitize(df['z_score_last'], bins) + 1
-    df['review_rating'] = 5 - df['review_rating']
+    # bins = [0.25, 0.5, 0.75]
+    # df['z_score_last'] = df['z_scores'].apply(lambda x: x[-1] if isinstance(x, list) and x else np.nan)
+    # # Use numpy's digitize method to convert z_scores to review_rating
+    # df['review_rating'] = np.digitize(df['z_score_last'], bins) + 1
+    # df['review_rating'] = 5 - df['review_rating']
+
+    def assign_rating(row):
+        # Extract the last z_score value
+        z_score = row['z_scores'][-1] if isinstance(row['z_scores'], list) and row['z_scores'] else None
+        
+        # Assign ratings based on z_score
+        if z_score is not None:
+            if z_score <= 0.25:
+                return 1
+            elif z_score <= 0.5:
+                return 2
+            elif z_score <= 0.75:
+                return 3
+            else:
+                return 4
+        else:
+            return None  # or some default value
+    df['review_rating'] = df.apply(assign_rating, axis=1) 
     df['review_time_curr'] = df['review_time'].apply(lambda x: x[-1])
     df['review_state_curr'] = df['review_state'].apply(lambda x: x[-1])
     New = 0
