@@ -1,6 +1,6 @@
 import './App.css';
 import ScatterPlot from "./components/ScatterPlot.js";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 function App() {
   // const data = [
@@ -12,21 +12,23 @@ function App() {
   // ];
   
   const [data, setData] = useState(null)
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('http://127.0.0.1:8080/visualise');
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      const result = await response.json();
-      setData(result)
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
-    }
-  };
   
-  fetchData().then(res => console.log(res))
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8080/visualise');
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        const result = await response.json();
+        setData(result)
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    };
+    
+    fetchData()
+  }, [])
   
   return (
     <div className="App">

@@ -34,42 +34,42 @@ def get_question():
 
     return jsonify(response)
 
-@app.route('/question', methods=['POST'])
-def post_question():
-    # Extract data from request
-    data = request.json
-    question_id = data.get('id')
-    answer = data.get('answer')
-    time_taken = data.get('timeTaken')
-    response_times = data.get('responseTime')
-    lesson_id = data.get('lessonId')
-    
-    # Compute z scores
-    current_z_scores = []
-    for idx,id_ in enumerate(question_id):
-        question_row = df.loc[id_]
-        question = question_row['question']
-        response = answer[idx]
-        response_time = response_times[idx]
-        is_fact = bool(question_row['fact_bool']) 
-        question_z_scores = question_row['z_scores']
-        z_score_new = calc_z_score(question, answer, response, response_time, is_fact)
-        question_z_scores.append(z_score_new)
-        
-        current_z_scores.append(question_z_scores)
-        # Compute Q scores
-        embeddings = df.loc[question_id, 'embeddings']
-        Q_scores = compute_Q_scores(embeddings, current_z_scores)
-        
-        S_scores = 
-        # Generate the summary
-        summary = generate_summary(questions_str)
-
-        # Return the summary in the response
-        return jsonify({'summary': summary})
-    except Exception as e:
-        # Handle any unexpected errors
-        return jsonify({'error': str(e)}), 500
+# @app.route('/question', methods=['POST'])
+# def post_question():
+#     # Extract data from request
+#     data = request.json
+#     question_id = data.get('id')
+#     answer = data.get('answer')
+#     time_taken = data.get('timeTaken')
+#     response_times = data.get('responseTime')
+#     lesson_id = data.get('lessonId')
+#
+#     # Compute z scores
+#     current_z_scores = []
+#     for idx,id_ in enumerate(question_id):
+#         question_row = df.loc[id_]
+#         question = question_row['question']
+#         response = answer[idx]
+#         response_time = response_times[idx]
+#         is_fact = bool(question_row['fact_bool'])
+#         question_z_scores = question_row['z_scores']
+#         z_score_new = calc_z_score(question, answer, response, response_time, is_fact)
+#         question_z_scores.append(z_score_new)
+#
+#         current_z_scores.append(question_z_scores)
+#         # Compute Q scores
+#         embeddings = df.loc[question_id, 'embeddings']
+#         Q_scores = compute_Q_scores(embeddings, current_z_scores)
+#
+#         S_scores =
+#         # Generate the summary
+#         summary = generate_summary(questions_str)
+#
+#         # Return the summary in the response
+#         return jsonify({'summary': summary})
+#     except Exception as e:
+#         # Handle any unexpected errors
+#         return jsonify({'error': str(e)}), 500
 
 def prepare_data(data):
     matrix = np.array(data['embedding'].apply(json.dumps).apply(literal_eval).to_list())
