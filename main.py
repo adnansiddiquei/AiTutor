@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-
+from part_5.gpt_explainer import generate_explanation
 app = Flask(__name__)
 
 @app.route('/lessonSummary', methods=['GET'])
@@ -55,6 +55,27 @@ def explain():
         "explanation": "Lorem ipsum dolor..."
     }
     return jsonify(response)
+
+@app.route('/explain', methods=['GET'])
+def explain():
+    try:
+        # Extract questionId from query parameters
+        question_id = request.args.get('questionId', type=int)
+
+        # Retrieve the question from the dataframe
+        if question_id in df.index:
+            question = df.loc[question_id, 'question']
+        else:
+            return jsonify({'error': 'Question ID not found'}), 404
+
+        # Generate the explanation
+        explanation = generate_explanation(question)
+
+        # Return the explanation in the response
+        return jsonify({'explanation': explanation})
+    except Exception as e:
+        # Handle any unexpected errors
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
