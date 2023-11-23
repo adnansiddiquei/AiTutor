@@ -44,6 +44,17 @@ filter_out_flags = []
 
 
 def get_schedule_scores(df, lesson_id):
+    '''Gets a df that contains id of question and schedule_scores for each one.
+    Input takes the full df and the lesson_id, or the number of days since the beginning of the course.
+    FSRS uses a calculated stability metric, which is how "stable" the idea is in your mind,
+    and schedules the next occurence of the card. We then scale this and normalize to give an output number
+    showing how urgent the card is, with 1 being the most urgent.
+    This is simply a time-series model with Markov property:
+    Depending on half-life, recall probability, result of recall, and difficulty, we define
+    a memory state-transition equation to update at every step.
+    We combine this with a Stochastic Shortest Path problem - the number of reviews required for memorizing something
+    to the require half-life is uncertain, so we combine the SSP and MMC to
+    find the optimal review time over iterations.'''
     deck_size = len(df)
     def calculate_review_duration(states, times):
         if states[-1] != 2:
