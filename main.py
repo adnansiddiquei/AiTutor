@@ -41,6 +41,17 @@ def post_question():
     answer = data.get('answer')
     time_taken = data.get('timeTaken')
 
+    # Compute z scores
+    z_scores = calc_z_scores(df, question_id, answer, time_taken)
+    # Compute Q scores
+
+    # Compute S scores
+
+    # Save df
+
+
+    # Process the posted data (e.g., record the answer and time taken)
+    # For this example, we'll just send back a confirmation
     # Process the posted data (e.g., record the answer and time taken)
     # For this example, we'll just send back a confirmation
     return jsonify({"message": "Response recorded"})
