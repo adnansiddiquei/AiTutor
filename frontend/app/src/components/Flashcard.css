@@ -1,0 +1,54 @@
+.flashcard-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.flashcard {
+    width: 1000px;
+    height: 500px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    position: relative;
+    padding: 20px;
+}
+
+.question {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.answers {
+    list-style: none;
+    padding: 0;
+}
+
+.answers li {
+    background-color: #f7f7f7;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.answers li:hover {
+    background-color: #e2e2e2;
+}
+
+.buttons {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin-left: 10px;
+}
+
+.answers li.selected {
+    background-color: #d0ebff; /* Highlight color */
+    font-weight: bold; /* Optional: make the selected answer bold */
+}
