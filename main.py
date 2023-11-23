@@ -77,5 +77,29 @@ def explain():
         # Handle any unexpected errors
         return jsonify({'error': str(e)}), 500
 
+@app.route('/lessonSummary', methods=['GET'])
+def lesson_summary():
+    try:
+        # Extract lessonId from query parameters
+        lesson_id = request.args.get('lessonId', type=int)
+
+        # Retrieve the list of question IDs for the given lesson ID
+        question_ids = lesson_questions.get(lesson_id)
+        if question_ids is None:
+            return jsonify({'error': 'Lesson ID not found'}), 404
+
+        # Retrieve the questions from the dataframe and concatenate them
+        questions = df[df['id'].isin(question_ids)]['question'].tolist()
+        questions_str = " ".join(questions)
+
+        # Generate the summary
+        summary = generate_summary(questions_str)
+
+        # Return the summary in the response
+        return jsonify({'summary': summary})
+    except Exception as e:
+        # Handle any unexpected errors
+        return jsonify({'error': str(e)}), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)
