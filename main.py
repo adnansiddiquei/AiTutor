@@ -8,9 +8,10 @@ import pandas as pd
 
 # Load the dataframe
 df = pd.read_pickle('data_full.pkl')
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/question', methods=['GET'])
 def get_question():
@@ -111,7 +112,7 @@ def prepare_data(data):
 @app.route('/visualise', methods=['GET'])
 def visualise():
     response_data = prepare_data(df)
-    return response_data
+    return jsonify(response_data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
