@@ -43,6 +43,11 @@ def compute_Q_scores(embeddings, current_z_scores):
                     Q_score_i += normalised_inv_cosine_similarities[i,j]/(total_normalised_inv_cosine_similarities) * current_z_scores[j]
             Q_scores.append(Q_score_i)
 
+        # normalise Q scores
+        max_val = np.nanmax(Q_scores)
+        min_val = np.nanmin(Q_scores)
+        Q_scores = (Q_scores - min_val)/(max_val - min_val)
+        
         return Q_scores
 
 def main():
