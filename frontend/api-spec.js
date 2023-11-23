@@ -34,11 +34,20 @@ spec = [
     {
         method: 'POST',
         endpoint: '/question',
-        data: {
+        data: [{
             id: '17', // question id
             answer: 1,  // their answer
-            timeTaken: 23  // in seconds
+            responseTime: 23,  // in seconds
+            lessonId: 1
+        },
+        {
+            id: '2', // question id
+            answer: 2,  // their answer
+            responseTime: 23, // in seconds
+            lessonId: 1
+
         }
+    ]
     },
     
     {
