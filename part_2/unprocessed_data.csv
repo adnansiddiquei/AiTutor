@@ -1,10 +1,10 @@
-﻿id,_notes,questions,options
+﻿id,_notes,questions,options,
 ,Ethical and Professional Standards,"Sumita Khatri wrote a research report and followed the necessary due diligence steps before
 sharing the report with her client. It turned out that there was a mistake in the report. This was
 pointed out by her client. Khatri apologized and re-submitted the corrected report.
 Did Khatri violate any CFA Institute Standards?","A. No.
 B. Yes, relating to performance presentation.
-C. Yes, relating to misconduct."
+C. Yes, relating to misconduct.",
 ,Ethical and Professional Standards,"Aryana Reid, CFA, is a private wealth manager. She writes a popular blog called “Aryana’s
 Investments” that has several thousand subscribers. The objective of the blog is to attract new
 clients; every post is also sent as an e-mail to its subscribers. The blog posts are usually a detailed
@@ -15,7 +15,7 @@ some new information.
 In order to comply with the CFA Institute Standards, which of the following is the most appropriate
 method for disseminating the change in investment recommendation?","A. Publish the post and send it as a mail to the blog subscribers.
 B. Publish the post, send a mail to blog subscribers and email her clients simultaneously.
-C. Email her clients first."
+C. Email her clients first.",
 ,Ethical and Professional Standards,"Kent Miller is an investment adviser at UBN Investments, who is registered to take Level I of the
 CFA Exam. He meets with Carrie Hartford, a new client of the firm, who has just moved her account
 from Northern Investment Bank. She tells Miller that she has read about derivatives and would like
@@ -25,7 +25,7 @@ To be consistent with the CFA Institute Standards, Miller should:","A. determine
 recommendation. B. explain to Hartford in detail about the characteristics of his firm and the investment
 vehicles it offers, including the nature of the industry.
 C. explain to Hartford his recent candidacy in the CFA Program, and its importance within the
-investment community."
+investment community.",
 ,Ethical and Professional Standards,"Justin Zoghlin, CFA, was hired as a wealth manager to manage the $2 billion estate of a family in
 Oklahoma a year ago. He was given the flexibility to choose his working hours. When Zoghlin took
 the job, he served as the President of his religious community that conducted social welfare
@@ -39,7 +39,7 @@ his employer of any of these activities.
 With regard to which of the business activities, has Zoghlin least likely violated the CFA Institute
 Standards of Professional Conduct?","A. Serving the religious community.
 B. Managing non-family investments.
-C. Managing family investments."
+C. Managing family investments.",
 ,Ethical and Professional Standards,"Rani Kaporwala, CFA, an analyst at Smart Securities, has just finished writing a newsletter to the
 firm’s clients about a new investment strategy involving derivatives. Due to the complex nature of
 the strategy designed to manage risk and the different trading patterns involved in various
@@ -48,7 +48,7 @@ relatively lower volatility in the market to explain the strategy. She consequen
 information regarding the portfolio construction and valuation scheme.
 Has Kaporwala violated any CFA Institute Standards?","A. No.
 B. Yes, relating to communications with clients and prospective clients.
-C. Yes, relating to fair dealing."
+C. Yes, relating to fair dealing.",
 ,Ethical and Professional Standards,"Cara Knightly is a much respected portfolio manager at RMC investment management company.
 Knightly is planning to sell her shares in General Tyre Company (GTC) from her personal portfolio
 to pay for her child’s college tuition. Knightly duly informs her supervisor according to the firm’s
@@ -57,7 +57,7 @@ on GTC with a “buy” recommendation, and Knightly has advised some of her cli
 the stock for their portfolios, where suitable.
 Has Knightly violated any CFA Institute Standards?","A. Yes, related to priority of transactions.
 B. Yes related to loyalty, prudence, and care.
-C. No."
+C. No.",
 ,Ethical and Professional Standards,"Andy McCarthy, CFA, resigns from his position as a portfolio manager with Drexell Investments and
 takes up a part-time teaching position at a local college. For the next two years, he does not file a
 completed Professional Conduct Statement with CFA Institute and does not pay his CFA Institute
@@ -69,7 +69,7 @@ membership fees. He feels that for the past two years he has not been involved i
 profession therefore he is not required to reinstate his CFA Institute membership.
 Has McCarthy violated any CFA Institute Standards?","A. No.
 B. Yes, relating to reference to the CFA Institute, the CFA designation, and the CFA Program.
-C. Yes, relating to loyalty."
+C. Yes, relating to loyalty.",
 ,Ethical and Professional Standards,"During lunch with his friend, who is an analyst in the software industry, John Smith, CFA, a trader
 with Zeta Capital finds out that there are rumors of a merger between two software companies.
 Smith has always valued his friend’s suggestions and the next day places a large buy order to be
@@ -77,14 +77,14 @@ distributed equally to all discretionary accounts for which the target firm is s
 informs all his non-discretionary accounts of the recommendation. By acting on his friend’s advice did Smith violate any CFA Institute Standards of Professional
 Conduct?","A. Yes, with respect to diligence and reasonable basis.
 B. Yes, with respect to priority of transactions.
-C. Yes, with respect to fair dealing."
+C. Yes, with respect to fair dealing.",
 ,Ethical and Professional Standards,Which of the following is least likely correct under the Code and Standards?,"A. Financial analysts may use conclusions as recommendations derived from analysis of
 public and non material nonpublic information, even if those conclusions would have been
 material inside information if directly communicated by the company.
 B. Financial analysts are free to act on material nonpublic information if it is received from
 industry experts.
 C. Member or candidate should make reasonable efforts to achieve public dissemination of
-material information."
+material information.",
 ,Ethical and Professional Standards,"Stewart is an analyst at a small investment firm, Axel Capital. While meeting a former colleague
 named Andre, Stewart finds out that GYTEX will announce its quarter-end earnings before the end
 of the week. Andre expects GYTEX’s quarter-end earnings to be almost 8% higher than the current
@@ -98,31 +98,31 @@ Prior to trading in GYTEX’s stock, Stewart conforms to the compliance procedur
 receives pre-clearance for trade and fulfils all the reporting requirements of Axel.
 Has Stewart violated the Code and Standards?","A. Yes, relating to priority of transactions.
 B. No.
-C. Yes, relating to material nonpublic information."
+C. Yes, relating to material nonpublic information.",
 ,Ethical and Professional Standards,"Which of the following actions is least likely to ensure fair treatment of clients of an asset
 management firm when an investment recommendation is changed?","A. Distributing recommendation to high net worth and institutional clients prior to individual
 accounts.
 B. Minimizing the time between decision and dissemination of the investment
 recommendation.
 C. Limiting the number of people involved who are privy to the information that the
-recommendation is going to be disseminated."
+recommendation is going to be disseminated.",
 ,Ethical and Professional Standards,Which of the following is not correct about verification?,"A. Verification must be performed by an independent third-party.
 B. A firm cannot perform its own verification.
-C. Verification ensures compliance of specific composites and departments"
+C. Verification ensures compliance of specific composites and departments",
 ,Ethical and Professional Standards,Which of the following is not a requirement of GIPS for composite construction?,"A. one or more portfolios.
 B. portfolios selected on an ex-post basis.
-C. portfolios managed according to a similar investment strategy"
+C. portfolios managed according to a similar investment strategy",
 ,Quantitative Methods,"Cassandra Turnbull is planning a college fund for her daughter who will start college after exactly 6
 years. The expected college expense will be USD55,000 per year payable at the start of each year
 for four years. Turnbull plans to invest in a fund which yields 6%. Turnbull has USD100,000 in
 savings at this time. What equal amount must she invest at the end of year 1, year 2, year 3, year 4 and year 5 to fund
 her daughter’s four-year college?","A. USD10,069.
 B. USD18,116.
-C. USD24,000."
+C. USD24,000.",
 ,Quantitative Methods,"An equity analyst has categorized some stocks based on the industry sector to which they belong.
 Which measurement scale is the analyst most likely using?","A. Interval.
 B. Nominal.
-C. Ordinal."
+C. Ordinal.",
 ,Quantitative Methods,"Steve Rowling is analyzing the historical performance of a portfolio manager who claimed to
 outperform its benchmark 70 percent of the time over a one-year time horizon. Steve has eight
 months record of the portfolio manager’s monthly performance. The portfolio manager
@@ -131,78 +131,78 @@ If all the outperformance results are independent and the portfolio manager’s 
 claimed, what is the probability of observing two or fewer profitable recommendations out of eight
 in total?","A. 7.5 %
 B. 5.76 %
-C. 11.3 %"
+C. 11.3 %",
 ,Quantitative Methods,"Bernhard Schwaiger, an equity analyst, wants to look at the ROE of all the companies in the S&P
 500 for the year 2015. He would most likely require:","A. time-series data.
 B. cross-sectional data.
-C. panel data."
+C. panel data.",
 ,Quantitative Methods,Which of the following types of probabilities is most likely based on historical data?,"A. An empirical probability.
 B. A priori probability.
-C. A subjective probability"
+C. A subjective probability",
 ,Quantitative Methods,It is least likely for a binomial random variable that:,"A. the standard deviation of the variable is np(1 – p).
 B. the probability of success, p, is constant for all trials.
-C. the experiment has only two outcomes."
+C. the experiment has only two outcomes.",
 ,Quantitative Methods,"Choosing not to reject a null hypothesis that the return on an investment grade bond that we are
 considering to buy is more than zero percent, is most likely a:","A. statistical decision.
 B. economic decision.
-C. investment decision."
+C. investment decision.",
 ,Quantitative Methods,Which of the following is least likely true for a normal probability distribution?,"A. It has an excess kurtosis of 3.0.
 B. The mean is equal to the median.
-C. It is completely described by its mean and (or standard deviation)."
+C. It is completely described by its mean and (or standard deviation).",
 ,Economics,"Assume that the nominal spot exchange rate (USD/AUD) increases by 6.5 percent, the Australian
 price level decreases by 2.5 percent, and the U.S. price level increases by 2 percent. The change in
 the real exchange rate is closest to:","A. 1.80 percent.
 B. 1.82 percent.
-C. 1.14 percent."
+C. 1.14 percent.",
 ,Economics,"A firm will most likely shut down its production in the short-run, when:","A. the total revenue is less than the total cost.
 B. the total revenue is less than the total variable cost.
-C. the marginal revenue is equal to the marginal cost."
+C. the marginal revenue is equal to the marginal cost.",
 ,Economics,Which of the following statements about Giffen goods is least accurate?,"A. Demand curve is positively sloped.
 B. Income effect overwhelms the substitution effect.
-C. Income and substitution effects are in the same direction."
+C. Income and substitution effects are in the same direction.",
 ,Economics,Aggregate demand (AD) curve will shift left if:,"A. interest rates are lower.
 B. taxes are higher.
-C. companies are operating at near or full capacity."
+C. companies are operating at near or full capacity.",
 ,Economics,"Assume that the nominal spot exchange rate (USD/EUR) increases by 7.2%, the eurozone price
 level decreases by 3%, and the U.S. price level increases by 2%.
 The change in the real exchange rate (%) is closest to:","A. 12.72 %.
 B. 1.94 %.
-C. -2.52%"
+C. -2.52%",
 ,Economics,"According to the Fischer effect, a decrease in expected inflation will most likely decrease:","A. both nominal and real interest rates.
 B. the nominal interest rate.
-C. the real interest rate."
+C. the real interest rate.",
 ,Economics,"A large country wants to increase its national welfare by imposing a tariff. Assuming its trading
 partner does not retaliate, which of the following conditions must hold in order for the large
 country to achieve its objective?","A. It must have a comparative advantage in the production of the imported good.
 B. The deadweight loss must be smaller than the benefit of its improving terms of trade.
-C. It must auction the import licenses for a fee to offset the decline in the consumer surplus."
+C. It must auction the import licenses for a fee to offset the decline in the consumer surplus.",
 ,Economics,"One of the reasons aggregate demand curve is downward sloping is because a higher price level
 means that the real exchange rate:","A. depreciates, making domestic goods cheaper in other countries and imports less
 competitive, resulting in a higher level of net exports.
 B. appreciates, making domestic goods more expensive in other countries and imports more
 competitive, resulting in a lower level of net exports.
 C. appreciates, making the country’s exports and imports less competitive and leading to
-lower net exports."
+lower net exports.",
 ,Economics,"The firms involved in a cartel have collusive agreements. Collusion is successful in some cases,
 but not in all. Which of the following factors will most likely result in the collusive behavior being
 overpowered?","A. Homogenous products.
 B. Few firms having similar market shares.
-C. Similar cost structures."
+C. Similar cost structures.",
 ,Financial Reporting and Analysis,Which of the following companies will have the lowest financial reporting quality?,"A. A company that combines the results of the two segments it operates in: healthcare and
 retail.
 B. A company that reports good performance due to favorable exchange rate movement.
 C. A company that provides delayed reports, but ones that are GAAP-compliant and
-decision-useful."
+decision-useful.",
 ,Financial Reporting and Analysis,A separate purchases account is most likely required by:,"A. the periodic inventory system.
 B. the perpetual inventory system.
-C. the specific identification valuation method."
+C. the specific identification valuation method.",
 ,Financial Reporting and Analysis,"Pardew Jewels had 340,000 common shares outstanding and 45,000 shares of preferred stock
 paying USD10 dividend per share. Each preferred share is convertible into one common share. In
 2008, the company reported a net income of USD2.1 million for the year.
 What is the reported diluted EPS on the company’s financial statements?","A. 4.85
 B. 5.45
-C. 6.18"
+C. 6.18",
 ,Financial Reporting and Analysis,"The most appropriate way to account for the assets, that have been selected to be spun-off, until
 the distribution occurs is to classify them as:","A. held for sale with no depreciation taken.
 B. held for use until disposal with no depreciation taken.
-C. held for use until disposal with depreciation continuing to be taken."
+C. held for use until disposal with depreciation continuing to be taken.",
