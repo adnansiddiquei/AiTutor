@@ -142,7 +142,51 @@ filter_out_suspended_cards = False
 filter_out_flags = []
 
 
-def get_schedule_scores(df, lesson_id):
+# parameters for FSRS
+w = [1.1008, 1.2746, 5.7619, 10.5114, 5.3148, 1.5796, 1.244, 0.003, 1.5741, 0.1741, 1.0137, 2.7279, 0.0114, 0.3071, 0.3981, 0.0, 1.9569]
+requestRetention = 0.82  # recommended setting: 0.8 ~ 0.9
+
+# parameters for Anki
+graduatingInterval = 1
+easyInterval = 4
+easyBonus = 1.3
+hardInterval = 1.2
+intervalModifier = 1
+newInterval = 0
+minimumInterval = 1
+leechThreshold = 8
+leechSuspend = False
+
+# common parameters
+maximumInterval = 36500
+new_cards_limits = 20
+review_limits = 400
+max_time_limts = 10000
+learn_days = 50
+
+# smooth curves
+moving_average_period = 14
+
+# Set it to True if you don't want the optimizer to use the review logs from suspended cards.
+filter_out_suspended_cards = False
+
+# Red: 1, Orange: 2, Green: 3, Blue: 4, Pink: 5, Turquoise: 6, Purple: 7
+# Set it to [1, 2] if you don't want the optimizer to use the review logs from cards with red or orange flag.
+filter_out_flags = []
+
+
+def get_schedule_scores(df, z_scores_array, lesson_id):
+    '''Gets a df that contains id of question and schedule_scores for each one.
+    Input takes the full df and the lesson_id, or the number of days since the beginning of the course.
+    FSRS uses a calculated stability metric, which is how "stable" the idea is in your mind,
+    and schedules the next occurence of the card. We then scale this and normalize to give an output number
+    showing how urgent the card is, with 1 being the most urgent.
+    This is simply a time-series model with Markov property:
+    Depending on half-life, recall probability, result of recall, and difficulty, we define
+    a memory state-transition equation to update at every step.
+    We combine this with a Stochastic Shortest Path problem - the number of reviews required for memorizing something
+    to the require half-life is uncertain, so we combine the SSP and MMC to
+    find the optimal review time over iterations.'''
     deck_size = len(df)
     def calculate_review_duration(states, times):
         if states[-1] != 2:
@@ -161,7 +205,7 @@ def get_schedule_scores(df, lesson_id):
     bins = [0.25, 0.5, 0.75]
 
     # Use numpy's digitize method to convert z_scores to review_rating
-    df['review_rating'] = np.digitize(df['z_scores'], bins) + 1
+    df['review_rating'] = np.digitize(z_scores_array, bins) + 1
     df['review_rating'] = 5 - df['review_rating']
     df['review_time_curr'] = df['review_time'].apply(lambda x: x[-1])
     df['review_state_curr'] = df['review_state'].apply(lambda x: x[-1])
