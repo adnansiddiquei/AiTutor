@@ -71,6 +71,51 @@ def post_question():
         # Handle any unexpected errors
         return jsonify({'error': str(e)}), 500
 
+@app.route('/explain', methods=['GET'])
+def explain():
+    try:
+        # Extract questionId from query parameters
+        question_id = request.args.get('questionId', type=int)
+
+        # Retrieve the question from the dataframe
+        if question_id in df.index:
+            question = df.loc[question_id, 'question']
+        else:
+            return jsonify({'error': 'Question ID not found'}), 404
+
+        # Generate the explanation
+        explanation = generate_explanation(question)
+
+        # Return the explanation in the response
+        return jsonify({'explanation': explanation})
+    except Exception as e:
+        # Handle any unexpected errors
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/lessonSummary', methods=['GET'])
+def lesson_summary():
+    try:
+        # Extract lessonId from query parameters
+        lesson_id = request.args.get('lessonId', type=int)
+
+        # Retrieve the list of question IDs for the given lesson ID
+        question_ids = lesson_questions.get(lesson_id)
+        if question_ids is None:
+            return jsonify({'error': 'Lesson ID not found'}), 404
+
+        # Retrieve the questions from the dataframe and concatenate them
+        questions = df[df['id'].isin(question_ids)]['question'].tolist()
+        questions_str = " ".join(questions)
+
+        # Generate the summary
+        summary = generate_summary(questions_str)
+
+        # Return the summary in the response
+        return jsonify({'summary': summary})
+    except Exception as e:
+        # Handle any unexpected errors
+        return jsonify({'error': str(e)}), 500
+    
 def prepare_data(data):
     matrix = np.array(data['embedding'].apply(json.dumps).apply(literal_eval).to_list())
     tsne = TSNE(n_components=2, perplexity=15, random_state=42, init='random', learning_rate=200)
