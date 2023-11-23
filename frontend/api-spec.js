@@ -15,7 +15,7 @@ spec = [
         endpoint: '/question',
         params: {
             lessonId: 1,
-            questionNumber: 4
+            questionNumber: 1
         },
         response: {
             id: '17',
@@ -26,7 +26,7 @@ spec = [
                 'portfolios managed according to a similar investment strategy.'
             ],
             correctAnswer: 0, // the position in the array which is the correct answer
-            lessonFinished: false // this should be true if it is the last question
+            lessonFinished: true // this should be true if it is the last question
         }
     },
 
@@ -38,6 +38,17 @@ spec = [
             id: '17', // question id
             answer: 1,  // their answer
             timeTaken: 23  // in seconds
+        }
+    },
+    
+    {
+        method: 'GET',
+        endpoint: '/explain',
+        params: {
+            questionId: 17
+        },
+        response: {
+            explanation: 'Lorem ipsum dolor...'
         }
     }
 ]
