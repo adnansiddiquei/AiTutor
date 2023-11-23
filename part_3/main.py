@@ -34,7 +34,6 @@ def compute_Q_scores(embeddings, current_z_scores):
         min_val = np.nanmin(inv_cosine_similarities)
 
         normalised_inv_cosine_similarities = (inv_cosine_similarities - min_val)/(max_val - min_val)
-        print(normalised_inv_cosine_similarities)
         total_normalised_inv_cosine_similarities = np.nansum(normalised_inv_cosine_similarities)/2
         for i in range(embeddings.shape[0]):
             # compute Q score for question i
@@ -44,13 +43,18 @@ def compute_Q_scores(embeddings, current_z_scores):
                     Q_score_i += normalised_inv_cosine_similarities[i,j]/(total_normalised_inv_cosine_similarities) * current_z_scores[j]
             Q_scores.append(Q_score_i)
 
+        # normalise Q scores
+        max_val = np.nanmax(Q_scores)
+        min_val = np.nanmin(Q_scores)
+        Q_scores = (Q_scores - min_val)/(max_val - min_val)
+        
         return Q_scores
 
 def main():
     parser = argparse.ArgumentParser(description='Process a CSV file.')
-    parser.add_argument('--csv_file', type=str, help='Path to the CSV file')
+    parser.add_argument('--pkl_file', type=str, help='Path to the CSV file')
     parser.add_argument('--demo', action='store_true', help='Run the demo')
-    parser.add_argument('--out_csv_file', type=str, help='Path to the output CSV file')
+    parser.add_argument('--out_pkl_file', type=str, help='Path to the output CSV file')
 
     args = parser.parse_args()
     if args.demo:
@@ -68,27 +72,36 @@ def main():
 
     else:
         # Read the CSV file
-        df = pd.read_csv(args.csv_file)
-
+        df = pd.read_pickle(args.pkl_file)
+        
+        # if no z_scores column generate random z scores between 0 and 1
+        if 'z_score' not in df.columns:
+            z_scores = np.random.rand(df.shape[0])
+            # set a random proportion of z scores to np.nan
+            no_unasked_qs = np.random.randint(0, df.shape[0]//2)
+            indices = np.random.choice(range(df.shape[0]), no_unasked_qs, replace=False)
+            z_scores[indices] = np.nan
+            df['z_score'] = z_scores
+        
         # Read the embeddings matrix
-        embeddings = df['embeddings']
+        embeddings = df['embedding']
     
-        # Read the z score matrix
-        z_score = df['z_scores'][:,-1]
+        # # Read the z score matrix
+        # z_score = df['z_score'][:,-1]
 
-        # Read Q score matrix
+        # # Read Q score matrix
+        # Q_score_matrix = df['Q_score']
 
-        Q_score_matrix = df['Q_scores']
+        Q_scores = compute_Q_scores(embeddings, df['z_score'])
 
-        Q_scores = compute_Q_scores(embeddings, current_z_scores)
+        
+        # # Append Q scores to Q score matrix column
+        # Q_score_matrix = np.append(Q_score_matrix, Q_scores, axis=1)
 
-        # Appened Q scores to Q score matrix column
-        Q_score_matrix = np.append(Q_score_matrix, Q_scores, axis=1)
+        # df['Q_score'] = Q_score_matrix
 
-        df['Q_scores'] = Q_score_matrix
-
-        # save df as pickle
-        df.to_pickle(args.out_csv_file)
+        # # save df as pickle
+        # df.to_pickle(args.out_pkl_file)
 
 if __name__ == '__main__':
     main()
