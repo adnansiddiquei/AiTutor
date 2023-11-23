@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Flashcard.css'; // Make sure to create a corresponding CSS file
 
-function Flashcard({ lessonSummary, flashcards }) {
+function Flashcard({ lessonSummary, flashcards, setLesson }) {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [lessonFinished, setLessonFinished] = useState(false)
@@ -29,7 +29,7 @@ function Flashcard({ lessonSummary, flashcards }) {
   };
   
   const handleNextLesson = () => {
-  
+    setLesson(prevLesson => prevLesson + 1)
   };
   
   const handleStart = () => setShowingLessonSummary(false)
