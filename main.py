@@ -19,31 +19,54 @@ def get_question():
     lesson_id = request.args.get('lessonId', type=int)
     question_number = request.args.get('questionNumber', type=int)
     
-    question = df.loc[question_number] 
-    response = {
-        "id": "17",
-        "question": "Which of the following is not a requirement of GIPS for composite construction?",
-        "answers": [
-            "one or more portfolios.",
-            "portfolios selected on an ex-post basis.",
-            "portfolios managed according to a similar investment strategy."
-        ],
-        "correctAnswer": 0,
-        "lessonFinished": True
+    if lesson_id == 0:
+        # Retrieve 10 random questions from the dataframe
+        question_ids = df.sample(10)['id'].tolist()
+
+    else:
+        df = pd.read_pickle('data_full.pkl')
+
+        # count number of nans in the z score column 
+        no_unasked_qs = df['z_scores'].isna().sum()
+        prop_answered = no_unasked_qs/len(df)
+        prop_answered = np.ceil(prop_answered)
+       
+        df['final_score'] = df['Q_scores'] * df['s_scores']
+        question_ids = df.nlargest(prop_answered, 'final_score')['id'].tolist()
+
+        for i in range(10-prop_answered):
+            # select questions from the rows with nan for z score
+            question_ids.append(df[df['z_scores'].isna()].sample(1)['id'].tolist()[0])
+
+
+    for idx,question_id in enumerate(question_ids):
+        question_row = df.loc[question_id]
+        question = question_row['question']
+        answers = question_row['answers']
+        correct_answer = 0
+        lesson_finished = False
+
+        response = {
+            "id": question_id,
+            "question": question,
+            "answers": answers,
+            "correctAnswer": correct_answer,
+            "lessonFinished": True if idx==9 else False
     }
 
     return jsonify(response)
 
 @app.route('/question', methods=['POST'])
 def post_question():
+    df = pd.read_pickle('data_full.pkl')
+    
     # Extract data from request
     data = request.json
-    question_id = data.get('id')
-    answer = data.get('answer')
-    time_taken = data.get('timeTaken')
-    response_times = data.get('responseTime')
-    lesson_id = data.get('lessonId')
-
+    question_id = [entry.get('id') for entry in data]
+    answer = [entry.get('answer') for entry in data]
+    response_times = [entry.get('responseTime') for entry in data]
+    lesson_id = [entry.get('lessonId') for entry in data]
+    
     # Compute z scores
     current_z_scores = []
     for idx,id_ in enumerate(question_id):
@@ -60,8 +83,6 @@ def post_question():
         # Compute Q scores
         embeddings = df.loc[question_id, 'embeddings']
         Q_scores = compute_Q_scores(embeddings, current_z_scores)
-        
-        
         S_scores = get_schedule_scores(df,lesson_id)
     
         # save Q and S scores
@@ -82,7 +103,6 @@ def post_question():
         # Generate the summary
         summary = generate_summary(questions_str)
 
-
         # Generate the summary
         summary = generate_summary(questions_str)
 
@@ -90,8 +110,6 @@ def post_question():
         with open('summary.txt', 'w') as f:
             f.write(summary)
         
-        # Return the summary in the response
-        return jsonify({'summary': summary})
     
 @app.route('/explain', methods=['GET'])
 def explain():
