@@ -71,9 +71,9 @@ def get_schedule_scores(df, lesson_id):
 
     # Define the bins for the intervals
     bins = [0.25, 0.5, 0.75]
-
+    df['z_score_last'] = df['z_scores'].apply(lambda x: x[-1] if isinstance(x, list) and x else np.nan)
     # Use numpy's digitize method to convert z_scores to review_rating
-    df['review_rating'] = np.digitize(df['z_scores'], bins) + 1
+    df['review_rating'] = np.digitize(df['z_score_last'], bins) + 1
     df['review_rating'] = 5 - df['review_rating']
     df['review_time_curr'] = df['review_time'].apply(lambda x: x[-1])
     df['review_state_curr'] = df['review_state'].apply(lambda x: x[-1])
